@@ -1,0 +1,11 @@
+.swaggerwanker: {
+  position: fixed;
+  z-index: 9999;
+  background-color: red;
+  padding: .5em;
+  border-radius: 10px;
+  font-weight: bold;
+}
+.article-content {
+  background-color: red !important;
+}

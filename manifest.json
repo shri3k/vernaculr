@@ -13,9 +13,11 @@
     "scripts": ["eventPage.js"]
   },
   "content_scripts": [{
-		"matches":["*://*/*"],
+    "matches": ["*://*/*"],
+    "css": ["style.css"],
     "js": ["vernaCs.js"]
   }],
+  "web_accessible_resources": ["style.css"],
   "permissions": ["contextMenus"],
   "icons": {
     "16": "icon.png"

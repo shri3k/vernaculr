@@ -10,6 +10,9 @@
     console.dir(clickData);
     if (clickData.menuItemId === "vernaculMe" && clickData.selectionText) {
       console.log("You wanna search this: %s", clickData.selectionText);
+      window.resize = function() {
+        console.log("resizing...");
+      }
     }
   });
 

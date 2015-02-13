@@ -1,10 +1,20 @@
-.swaggerwanker: {
+.parent-tooltip {
+	position:fixed;
+	z-index: 999;
+	background-color:red;
+  padding: .5em;
+  border-radius: 10px;
+  font-weight: bold;
+  color: red;
+}
+#vernaTip.swaggerwanker: {
   position: fixed;
-  z-index: 9999;
+  z-index: 999;
   background-color: red;
   padding: .5em;
   border-radius: 10px;
   font-weight: bold;
+  color: red;
 }
 .article-content {
   background-color: red !important;

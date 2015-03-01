@@ -19,15 +19,22 @@ var Tooltip = (function () {
       top: 0,
       bottom: 0
     };
-    this.init();
   }
 
   _prototypeProperties(Tooltip, null, {
-    init: {
-      value: function init() {
+    render: {
+      value: function render() {
         document.body.appendChild(this.parent);
         this.parent.innerHTML = this.child;
-        this.parent.style.visibility = "hidden";
+        this.resize()();
+        this.display(true);
+      },
+      writable: true,
+      configurable: true
+    },
+    display: {
+      value: function display(bool) {
+        this.parent.style.visibility = bool ? "visible" : "hidden";
       },
       writable: true,
       configurable: true
@@ -37,7 +44,6 @@ var Tooltip = (function () {
         if (window.getSelection().type.toLowerCase() === "range") {
           var pos = window.getSelection().getRangeAt(0).cloneRange().getClientRects()[0];
           this.pos = pos;
-          this.parent.style.visibility = "visible";
           cb.call(this, null);
         }
       },
@@ -47,9 +53,14 @@ var Tooltip = (function () {
     reposition: {
       value: function reposition() {
         this.parent.style.left = this.pos.left + "px";
-        this.parent.style.top = this.pos.top + "px";
-        this.parent.style.right = this.pos.right + "px";
-        this.parent.style.bottom = this.pos.bottom + "px";
+        this.parent.style.top = this.pos.top + this.parent.clientHeight + "px";
+      },
+      writable: true,
+      configurable: true
+    },
+    resize: {
+      value: function resize() {
+        return this.partial(this.trackPos, this.reposition);
       },
       writable: true,
       configurable: true
@@ -77,12 +88,29 @@ module.exports = Tooltip;
 
 var Tooltip = require("./Tooltip");
 var tooltip = new Tooltip("tooler");
-var partialApp = tooltip.partial(tooltip.trackPos, tooltip.reposition);
-window.onresize = partialApp;
-document.querySelector("*").addEventListener("click", function (e) {
-  if (e.target.id !== tooltip.parent.id) {
-    document.querySelector("#" + tooltip.parent.id).style.visibility = "hidden";
+var resizeMe = tooltip.resize();
+window.onresize = resizeMe;
+
+chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.action === "getEntry") {
+    tooltip.child = request.result;
+    tooltip.render();
   }
+});
+
+var getParentNode = function (node) {
+  if (typeof node.className !== "undefined") {
+    if (node.className === tooltip.parent.className) {
+      return true;
+    }
+  } else {
+    return false;
+  }
+  return getParentNode(node.parentNode);
+};
+
+document.querySelector("*").addEventListener("click", function (e) {
+  tooltip.display(getParentNode(e.target));
 });
 
 },{"./Tooltip":"/home/shriek/sandbox/projects/vernaculr/Tooltip.js"}]},{},["/home/shriek/sandbox/projects/vernaculr/main.js"]);

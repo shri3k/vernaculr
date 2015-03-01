@@ -10,29 +10,34 @@ class Tooltip {
       "top": 0,
       "bottom": 0
     };
-    this.init();
   }
 
-  init() {
+  render() {
     document.body.appendChild(this.parent);
     this.parent.innerHTML = this.child;
-    this.parent.style.visibility = "hidden";
+    this.resize()();
+    this.display(true);
+  }
+
+  display(bool) {
+    this.parent.style.visibility = bool ? 'visible' : 'hidden';
   }
 
   trackPos(cb) {
     if (window.getSelection().type.toLowerCase() === "range") {
       var pos = window.getSelection().getRangeAt(0).cloneRange().getClientRects()[0];
       this.pos = pos;
-      this.parent.style.visibility = "visible";
       cb.call(this, null);
     }
   }
 
   reposition() {
     this.parent.style.left = this.pos.left + 'px';
-    this.parent.style.top = this.pos.top + 'px';
-    this.parent.style.right = this.pos.right + 'px';
-    this.parent.style.bottom = this.pos.bottom + 'px';
+    this.parent.style.top = (this.pos.top + this.parent.clientHeight) + 'px';
+  }
+
+  resize() {
+    return this.partial(this.trackPos, this.reposition);
   }
 
   partial(fn) {

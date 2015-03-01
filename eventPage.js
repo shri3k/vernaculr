@@ -6,18 +6,20 @@ module.exports = "3acbbc95-cd29-4502-8d00-485da58bf31a";
 },{}],"/home/shriek/sandbox/projects/vernaculr/eventPage6.js":[function(require,module,exports){
 "use strict";
 
-// var xml2json = require('xml2json');
 (function () {
   "use strict";
   var someFunc = function () {
     console.log(this.responseText);
   };
-  var query = function (word) {
+  var query = function (word, sendResponse) {
     var apiKey = require("./apiKey");
     var apiUrl = "http://localhost:3000/getEntry/" + word;
     var xhr = new XMLHttpRequest();
-    xhr.onload = someFunc;
+    xhr.onload = sendResponse;
     xhr.open("get", apiUrl, true);
+    xhr.addEventListener("error", function () {
+      console.log("dieing");
+    }, false);
     xhr.send();
   };
 
@@ -29,10 +31,19 @@ module.exports = "3acbbc95-cd29-4502-8d00-485da58bf31a";
 
   chrome.contextMenus.create(menuItem);
   chrome.contextMenus.onClicked.addListener(function (clickData) {
-    console.dir(clickData);
     if (clickData.menuItemId === "vernaculMe" && clickData.selectionText) {
-      query(clickData.selectionText);
-      console.log("You wanna search this: %s", clickData.selectionText);
+      query(clickData.selectionText, function () {
+        var resp = this.responseText;
+        chrome.tabs.query({
+          active: true,
+          currentWindow: true
+        }, function (tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, {
+            action: "getEntry",
+            result: JSON.parse(resp).entryContent
+          }, function (response) {});
+        });
+      });
     }
   });
 })();

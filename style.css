@@ -1,11 +1,15 @@
 .parent-tooltip {
-	position:fixed;
-	z-index: 999;
-	background-color:red;
+  position: absolute;
+  z-index: 999;
+  background-color: #3f3f3f;
   padding: .5em;
   border-radius: 10px;
   font-weight: bold;
-  color: red;
+  color: white;
+  max-width: 350px;
+  width: 30%;
+  height: 250px;
+  overflow-y: scroll;
 }
 #vernaTip.swaggerwanker: {
   position: fixed;

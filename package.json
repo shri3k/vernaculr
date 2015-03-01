@@ -1,0 +1,24 @@
+{
+  "name": "vernaculr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "build": "browserify Tooltip.js main.js -t babelify -o vernaCs.js",
+    "watch": "watchify -e main.js -t babelify -o vernaCs.js -v & watchify -e eventPage6.js -t babelify -o eventPage.js -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:shriek/vernaculr.git"
+  },
+  "author": "Yojan Shrestha <sickgrin@gmail.com> (http://thisisyojan.com)",
+  "license": "ISC",
+  "devDependencies": {
+    "babel": "^4.0.1",
+    "babelify": "^5.0.3",
+    "browserify": "^8.1.3",
+    "watchify": "^2.3.0"
+  },
+  "dependencies": {}
+}
